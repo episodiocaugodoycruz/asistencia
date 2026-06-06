@@ -1,0 +1,350 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Conectados por Mendoza Futura</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --primario:#092e20;
+    --secundario:#1565c0;
+    --fondo:#f5f4f0;
+    --texto:#1c1c1c;
+    --borde:#e0ddd6;
+    --error:#ef4444;
+    --exito:#10b981;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'DM Sans',sans-serif;
+    background:var(--fondo);
+    color:var(--texto);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+/* HEADER */
+
+header{
+    background:var(--primario);
+    color:white;
+    padding:16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+
+.logo-container{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.logo-container h2{
+    font-size:1.2rem;
+}
+
+.usuario-header{
+    font-weight:600;
+}
+
+/* NAV */
+
+nav{
+    background:white;
+    border-bottom:2px solid var(--borde);
+}
+
+nav ul{
+    list-style:none;
+    display:flex;
+    gap:20px;
+    padding:16px;
+    flex-wrap:wrap;
+}
+
+nav a{
+    text-decoration:none;
+    color:var(--primario);
+    font-weight:700;
+    transition:.3s;
+}
+
+nav a:hover{
+    color:var(--secundario);
+}
+
+/* MAIN */
+
+main{
+    flex:1;
+    padding:16px;
+}
+
+.panel-usuario{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.avatar{
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    background:var(--secundario);
+    color:white;
+    font-size:35px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:auto;
+}
+
+.nombre{
+    margin-top:10px;
+    color:var(--primario);
+    font-size:1.4rem;
+    font-weight:700;
+}
+
+.rol{
+    display:inline-block;
+    margin-top:8px;
+    padding:6px 14px;
+    border-radius:20px;
+    background:var(--secundario);
+    color:white;
+    font-size:.85rem;
+    font-weight:600;
+}
+
+/* INFO */
+
+.info{
+    display:grid;
+    gap:10px;
+    margin-bottom:30px;
+}
+
+.info p{
+    background:white;
+    border:1px solid var(--borde);
+    border-left:4px solid var(--secundario);
+    padding:12px;
+    border-radius:8px;
+}
+
+/* CARDS */
+
+.contenedor{
+    display:grid;
+    gap:20px;
+    margin-bottom:40px;
+}
+
+.card{
+    background:white;
+    border:1px solid var(--borde);
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.card h3{
+    color:var(--primario);
+    margin-bottom:15px;
+    border-bottom:2px solid var(--secundario);
+    padding-bottom:8px;
+}
+
+.lista{
+    max-height:220px;
+    overflow-y:auto;
+}
+
+.item{
+    padding:12px;
+    border-bottom:1px solid var(--borde);
+    cursor:pointer;
+    transition:.3s;
+}
+
+.item:hover{
+    background:#eef5ff;
+    color:var(--secundario);
+}
+
+.item:last-child{
+    border-bottom:none;
+}
+
+/* FOOTER */
+
+footer{
+    background:var(--primario);
+    color:white;
+    text-align:center;
+    padding:16px;
+    margin-top:auto;
+}
+
+/* DESKTOP */
+
+@media (min-width:768px){
+
+    header{
+        padding:20px 32px;
+    }
+
+    main{
+        padding:32px;
+    }
+
+    .contenedor{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<header>
+
+    <div class="logo-container">
+        <img src="logo.png" alt="Logo Conectados" class="logo">
+        <h2>Conectados por Mendoza Futura</h2>
+    </div>
+
+    <div class="usuario-header">
+        Usuario
+    </div>
+
+</header>
+
+<nav>
+    <ul>
+        <li><a href="#">Inicio</a></li>
+        <li><a href="#">Cursos</a></li>
+        <li><a href="#">Facilitadores</a></li>
+        <li><a href="#">Estudiantes</a></li>
+        <li><a href="#">Asistencias</a></li>
+    </ul>
+</nav>
+
+<main>
+
+    <!-- ADMINISTRADOR -->
+
+    <section class="panel-usuario">
+
+        <div class="avatar">👤</div>
+
+        <div class="nombre">Juan Pérez</div>
+
+        <div class="rol">Administrador</div>
+
+    </section>
+
+    <section class="info">
+        <p><strong>Nombre:</strong> Juan</p>
+        <p><strong>Apellido:</strong> Pérez</p>
+        <p><strong>ID:</strong> 001</p>
+        <p><strong>Usuario:</strong> admin01</p>
+        <p><strong>Contraseña:</strong> ********</p>
+        <p><strong>Fecha de nacimiento:</strong> 15/04/1995</p>
+    </section>
+
+    <div class="contenedor">
+
+        <section class="card">
+            <h3>Cursos</h3>
+
+            <div class="lista">
+                <div class="item">Programación Web</div>
+                <div class="item">Diseño UX/UI</div>
+                <div class="item">Python</div>
+                <div class="item">Base de Datos</div>
+                <div class="item">JavaScript</div>
+            </div>
+
+        </section>
+
+        <section class="card">
+            <h3>Facilitadores</h3>
+
+            <div class="lista">
+                <div class="item">Luciano Godoy</div>
+                <div class="item">María González</div>
+                <div class="item">Carlos Pérez</div>
+                <div class="item">Ana López</div>
+                <div class="item">Pedro Ruiz</div>
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- FACILITADOR -->
+
+    <section class="panel-usuario">
+
+        <div class="avatar">👤</div>
+
+        <div class="nombre">Luciano Godoy</div>
+
+        <div class="rol">Facilitador</div>
+
+    </section>
+
+    <section class="info">
+        <p><strong>Nombre:</strong> Luciano</p>
+        <p><strong>Apellido:</strong> Godoy</p>
+        <p><strong>ID:</strong> 015</p>
+        <p><strong>Usuario:</strong> luciano.g</p>
+        <p><strong>Contraseña:</strong> ********</p>
+    </section>
+
+    <section class="card">
+
+        <h3>Cursos Asignados</h3>
+
+        <div class="lista">
+            <div class="item">Programación Web</div>
+            <div class="item">Diseño Web</div>
+            <div class="item">Introducción a Python</div>
+            <div class="item">Base de Datos</div>
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    © 2026 Conectados por Mendoza Futura
+</footer>
+
+</body>
+</html>
+```
