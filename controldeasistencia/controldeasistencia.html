@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Conectados por Mendoza Futura - Control de Asistencia</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --verde: #092e20;
+      --verde-nav: #0b5a2a;
+      --fondo: #f5f4f0;
+      --texto: #1c1c1c;
+      --borde: #e0ddd6;
+      --presente: #10b981;
+      --ausente: #e11d48;
+      --justificado: #f59e0b;
+      --blanco: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: var(--fondo);
+      color: var(--texto);
+      font-family: "DM Sans", system-ui, sans-serif;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--verde);
+      color: white;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* SVG logo inline – árbol estilizado */
+    .logo-svg {
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: .4px;
+    }
+
+    .usuario {
+      font-weight: 500;
+      font-size: 13px;
+      background: rgba(255,255,255,.15);
+      padding: 6px 14px;
+      border-radius: 999px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--verde-nav);
+      padding: 0 24px;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 4px;
+    }
+    nav a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      transition: background .15s;
+    }
+    nav a:hover, nav a.activo { background: rgba(255,255,255,.18); }
+
+    /* ── MAIN ── */
+    main {
+      padding: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── Cabecera de sección ── */
+    .seccion-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 10px;
+      padding: 12px 20px;
+      margin-bottom: 20px;
+    }
+    .seccion-header .titulo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .seccion-header h2 {
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .facilitador-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #444;
+    }
+
+    /* ── Fecha ── */
+    .fecha-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .fecha-row label {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .fecha-row input[type="date"] {
+      padding: 7px 12px;
+      border: 1px solid var(--borde);
+      border-radius: 7px;
+      font-family: inherit;
+      font-size: 14px;
+      background: var(--blanco);
+    }
+
+    /* ── TABLA ── */
+    .tabla-asistencia {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .tabla-head {
+      display: grid;
+      grid-template-columns: 2fr 3fr 200px;
+      background: #f2f1ee;
+      border-bottom: 1px solid var(--borde);
+      padding: 10px 20px;
+      font-weight: 700;
+      font-size: 13px;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    .fila-estudiante {
+      display: grid;
+      grid-template-columns: 2fr 3fr 200px;
+      align-items: center;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--borde);
+      transition: background .1s;
+    }
+    .fila-estudiante:last-child { border-bottom: none; }
+    .fila-estudiante:hover { background: #fafaf8; }
+
+    /* Info del alumno */
+    .alumno-nombre {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .alumno-meta {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Observaciones */
+    .obs-cell { padding-right: 16px; }
+    .observaciones {
+      width: 100%;
+      min-height: 60px;
+      padding: 8px 10px;
+      border: 1px solid var(--borde);
+      border-radius: 7px;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 13px;
+      background: #fafaf8;
+      transition: border-color .15s;
+    }
+    .observaciones:focus {
+      outline: none;
+      border-color: var(--verde-nav);
+    }
+
+    /* ── Botones de estado ── */
+    .estado-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-estado {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      background: #f0eeea;
+      color: #555;
+      transition: all .15s;
+      user-select: none;
+    }
+    .btn-estado:hover { opacity: .85; }
+
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Estado inactivo */
+    .btn-estado[data-tipo="presente"] .dot { background: var(--presente); }
+    .btn-estado[data-tipo="ausente"]  .dot { background: var(--ausente); }
+    .btn-estado[data-tipo="justificado"] .dot { background: var(--justificado); }
+
+    /* Estado ACTIVO */
+    .btn-estado.activo[data-tipo="presente"] {
+      background: #d1fae5;
+      border-color: var(--presente);
+      color: #065f46;
+    }
+    .btn-estado.activo[data-tipo="ausente"] {
+      background: #fee2e2;
+      border-color: var(--ausente);
+      color: #9f1239;
+    }
+    .btn-estado.activo[data-tipo="justificado"] {
+      background: #fef3c7;
+      border-color: var(--justificado);
+      color: #92400e;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+      color: #888;
+      border-top: 1px solid var(--borde);
+      margin-top: 32px;
+    }
+
+    @media (max-width: 640px) {
+      .tabla-head,
+      .fila-estudiante {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .tabla-head { display: none; }
+      .obs-cell { padding-right: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="logo">
+      <!-- Logo SVG inline: hoja/árbol estilizado en blanco -->
+      <svg class="logo-svg" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Conectados">
+        <circle cx="21" cy="21" r="21" fill="rgba(255,255,255,0.12)"/>
+        <!-- tronco -->
+        <rect x="19.5" y="26" width="3" height="9" rx="1.5" fill="white"/>
+        <!-- copa izquierda -->
+        <ellipse cx="15" cy="20" rx="8" ry="10" fill="white" opacity=".9"/>
+        <!-- copa derecha -->
+        <ellipse cx="27" cy="20" rx="8" ry="10" fill="white" opacity=".75"/>
+        <!-- copa central (encima) -->
+        <ellipse cx="21" cy="17" rx="9" ry="11" fill="white"/>
+      </svg>
+      <span class="brand">Conectados</span>
+    </div>
+    <div class="usuario">Usuario: Mentor/a</div>
+  </header>
+
+  <!-- ── NAV ── -->
+  <nav aria-label="Navegación principal">
+    <ul>
+      <li><a href="#" class="activo">Control de asistencia</a></li>
+      <li><a href="#">Perfil</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── MAIN ── -->
+  <main>
+
+    <!-- Cabecera de sección -->
+    <div class="seccion-header">
+      <div class="titulo">
+        <svg width="28" height="28" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="21" cy="21" r="21" fill="#092e20"/>
+          <rect x="19.5" y="26" width="3" height="9" rx="1.5" fill="white"/>
+          <ellipse cx="15" cy="20" rx="8" ry="10" fill="white" opacity=".9"/>
+          <ellipse cx="27" cy="20" rx="8" ry="10" fill="white" opacity=".75"/>
+          <ellipse cx="21" cy="17" rx="9" ry="11" fill="white"/>
+        </svg>
+        <h2>Conectados por Mendoza Futura</h2>
+      </div>
+      <div class="facilitador-label">Facilitador: Nombre Apellido</div>
+    </div>
+
+    <!-- Fecha -->
+    <div class="fecha-row">
+      <label for="fecha-control">📅 Fecha:</label>
+      <input type="date" id="fecha-control" value="2026-06-06">
+    </div>
+
+    <!-- Tabla -->
+    <div class="tabla-asistencia" role="table" aria-label="Control de asistencia">
+
+      <div class="tabla-head" role="row">
+        <div>Alumno</div>
+        <div>Observaciones</div>
+        <div>Estado</div>
+      </div>
+
+      <!-- Filas generadas por JS -->
+      <div id="filas-contenedor"></div>
+
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    © 2026 Mendoza Futura. Conectados. Todos los derechos reservados.
+  </footer>
+
+  <script>
+    const estudiantes = [
+      { nombre: "María González",     dni: "12345678", id: "001", email: "mgonzalez@mendoza.edu.ar", curso: "3ºA" },
+      { nombre: "Lucas Pereyra",      dni: "23456789", id: "002", email: "lpereyra@mendoza.edu.ar",  curso: "3ºA" },
+      { nombre: "Valentina Romero",   dni: "34567890", id: "003", email: "vromero@mendoza.edu.ar",   curso: "3ºB" },
+      { nombre: "Agustín Molina",     dni: "45678901", id: "004", email: "amolina@mendoza.edu.ar",   curso: "3ºB" },
+      { nombre: "Florencia Castillo", dni: "56789012", id: "005", email: "fcastillo@mendoza.edu.ar", curso: "3ºA" },
+      { nombre: "Mateo Vargas",       dni: "67890123", id: "006", email: "mvargas@mendoza.edu.ar",   curso: "3ºC" },
+    ];
+
+    const contenedor = document.getElementById("filas-contenedor");
+
+    estudiantes.forEach((est, i) => {
+      const fila = document.createElement("div");
+      fila.className = "fila-estudiante";
+      fila.setAttribute("role", "row");
+
+      fila.innerHTML = `
+        <!-- Columna alumno -->
+        <div>
+          <div class="alumno-nombre">${est.nombre}</div>
+          <div class="alumno-meta">
+            DNI: ${est.dni}<br>
+            ID: ${est.id} &nbsp;|&nbsp; Curso: ${est.curso}<br>
+            ${est.email}
+          </div>
+        </div>
+
+        <!-- Columna observaciones -->
+        <div class="obs-cell">
+          <textarea class="observaciones" placeholder="Observaciones..." aria-label="Observaciones para ${est.nombre}"></textarea>
+        </div>
+
+        <!-- Columna estado -->
+        <div class="estado-cell">
+          <button class="btn-estado" data-tipo="presente" aria-label="Marcar presente a ${est.nombre}">
+            <span class="dot"></span> Presente
+          </button>
+          <button class="btn-estado" data-tipo="ausente" aria-label="Marcar ausente a ${est.nombre}">
+            <span class="dot"></span> Ausente
+          </button>
+          <button class="btn-estado" data-tipo="justificado" aria-label="Ausente justificado ${est.nombre}">
+            <span class="dot"></span> Ausente justificado
+          </button>
+        </div>
+      `;
+
+      // Lógica de selección de estado
+      const botones = fila.querySelectorAll(".btn-estado");
+      botones.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const yaActivo = btn.classList.contains("activo");
+          // Desactivar todos
+          botones.forEach(b => b.classList.remove("activo"));
+          // Si no estaba activo, activarlo; si ya lo estaba, lo deselecciona
+          if (!yaActivo) btn.classList.add("activo");
+        });
+      });
+
+      contenedor.appendChild(fila);
+    });
+  </script>
+
+</body>
+</html>
