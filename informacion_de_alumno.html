@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conectados - Mendoza Futura</title>
+    <!-- Google Fonts: DM Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- DISEÑO SÓLIDO Y ATÓMICO (Mendoza Futura Palette) --- */
+        :root {
+            --primario: #092e20;        /* Verde Institucional */
+            --secundario: #1565c0;      /* Azul Conectados */
+            --fondo: #f5f4f0;           /* Arena de fondo sutil */
+            --texto: #1c1c1c;           /* Texto oscuro de alta legibilidad */
+            --borde: #e0ddd6;           /* Color de bordes neutro */
+            --error: #ef4444;           /* Rojo de Alertas médicas o de validación */
+            --exito: #10b981;           /* Verde de estados exitosos */
+            --blanco: #ffffff;
+            --gris-suave: #faf9f6;
+            --azul-oscuro: #0f4c81;
+        }
+
+        /* --- RESET & ACCESIBILIDAD --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--fondo);
+            color: var(--texto);
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER --- */
+        .app-header {
+            background-color: var(--primario);
+            color: var(--blanco);
+            padding: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Imagen del logotipo oficial proporcionado */
+        .brand-logo-img {
+            height: 48px;
+            width: 48px;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            border: 2px solid var(--blanco);
+            background-color: var(--blanco); /* Fondo blanco para que contraste perfectamente */
+            padding: 2px;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            line-height: 1.1;
+        }
+
+        .brand-sub {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.85;
+            font-weight: 700;
+        }
+
+        .user-badge {
+            background-color: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 0.825rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .user-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--exito);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* --- NAVEGACIÓN --- */
+        .app-nav {
+            background-color: var(--blanco);
+            border-bottom: 1px solid var(--borde);
+            position: sticky;
+            top: 80px;
+            z-index: 40;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .nav-container::-webkit-scrollbar {
+            display: none; /* Safari & Chrome */
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            width: 100%;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 14px 16px;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            color: var(--primario);
+            background-color: rgba(9, 46, 32, 0.02);
+        }
+
+        .nav-link.active {
+            color: var(--secundario);
+            border-bottom-color: var(--secundario);
+            background-color: rgba(21, 101, 192, 0.03);
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .app-main {
+            flex: 1;
+            padding: 16px;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* --- COMPONENTE: CONTROLES Y BÚSQUEDA --- */
+        .actions-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .search-form {
+            display: flex;
+            background-color: var(--blanco);
+            border: 1px solid var(--borde);
+            border-radius: 8px;
+            padding: 4px;
+            width: 100%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 10px 12px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--texto);
+            background: transparent;
+            outline: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--secundario);
+            color: var(--blanco);
+        }
+
+        .btn-primary:hover {
+            background-color: #0d47a1;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background-color: var(--primario);
+            color: var(--blanco);
+        }
+
+        .btn-success:hover {
+            background-color: #051d14;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: var(--blanco);
+            border: 1px solid var(--borde);
+            color: var(--texto);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--fondo);
+        }
+
+        .btn-danger {
+            background-color: var(--error);
+            color: var(--blanco);
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        /* --- NOTIFICACIONES / MENSAJES --- */
+        .alert-toast {
+            background-color: var(--blanco);
+            border-left: 4px solid var(--secundario);
+            padding: 12px 16px;
+            border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        .alert-toast.success { border-left-color: var(--exito); }
+        .alert-toast.error { border-left-color: var(--error); }
+
+        @keyframes slideIn {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* --- FICHA DIGITAL DEL ALUMNO (ESTRUCTURA DEL PRONTUARIO) --- */
+        .student-dossier {
+            background-color: var(--blanco);
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Bloque Superior de la Ficha */
+        .dossier-hero {
+            display: flex;
+            flex-direction: column-reverse;
+            background-color: var(--gris-suave);
+            border-bottom: 2px solid var(--borde);
+        }
+
+        .dossier-meta {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .dossier-name-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primario);
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .dossier-status-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--exito);
+            background-color: rgba(16, 185, 129, 0.1);
+            padding: 4px 10px;
+            border-radius: 9999px;
+            width: fit-content;
+        }
+
+        /* Foto del Alumno (Marco idéntico al Prontuario de la imagen) */
+        .dossier-avatar-frame {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #eae7df;
+            border-bottom: 1px solid var(--borde);
+        }
+
+        .photo-aspect-wrapper {
+            width: 160px;
+            height: 180px;
+            background-color: var(--blanco);
+            border: 4px solid var(--blanco);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .photo-aspect-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+
+        /* Rejilla de Datos con estructura de Tabla limpia */
+        .dossier-grid {
+            padding: 16px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .grid-cell {
+            border-bottom: 1px solid var(--borde);
+            padding-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .grid-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #5e6b7c;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .grid-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--texto);
+        }
+
+        /* Celdas Especiales */
+        .cell-alert {
+            background-color: rgba(239, 68, 68, 0.04);
+            border: 1px dashed var(--error);
+            border-radius: 6px;
+            padding: 10px;
+        }
+
+        .cell-alert .grid-label {
+            color: var(--error);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .cell-badge {
+            background-color: #f1f5f9;
+            border: 1px solid var(--borde);
+            border-radius: 6px;
+            padding: 10px;
+        }
+
+        .cell-highlight {
+            border-left: 3px solid var(--secundario);
+            padding-left: 8px;
+        }
+
+        /* --- MODO FORMULARIO (INTERACTIVO PARA EDICIÓN Y CREACIÓN) --- */
+        .form-dossier {
+            background-color: var(--blanco);
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            display: none; /* se activa con JS */
+            animation: fadeIn 0.3s ease;
+        }
+
+        .form-header {
+            background-color: var(--primario);
+            color: var(--blanco);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-header-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .form-body {
+            padding: 16px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--borde);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--texto);
+            background-color: var(--blanco);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--secundario);
+            box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.15);
+        }
+
+        .form-actions {
+            border-top: 1px solid var(--borde);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            background-color: var(--gris-suave);
+        }
+
+        /* --- FOOTER --- */
+        .app-footer {
+            background-color: var(--primario);
+            color: var(--blanco);
+            text-align: center;
+            padding: 20px 16px;
+            font-size: 0.8rem;
+            margin-top: auto;
+            border-top: 4px solid var(--secundario);
+        }
+
+        .footer-logo-text {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        /* --- RESPONSIVE DESKTOP (Layout Avanzado) --- */
+        @media (min-width: 768px) {
+            .app-header {
+                padding: 16px 32px;
+            }
+
+            .header-container {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 0;
+            }
+
+            .app-nav {
+                top: 80px;
+            }
+
+            .nav-container {
+                padding: 0 32px;
+            }
+
+            .nav-item {
+                flex: none;
+            }
+
+            .nav-link {
+                padding: 16px 24px;
+                font-size: 0.95rem;
+            }
+
+            .app-main {
+                padding: 32px;
+            }
+
+            .actions-bar {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .search-form {
+                max-width: 480px;
+            }
+
+            /* Dossier en escritorio se convierte en una sola pieza elegante con foto lateral */
+            .dossier-hero {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .dossier-meta {
+                padding: 32px;
+            }
+
+            .dossier-avatar-frame {
+                padding: 32px;
+                border-bottom: none;
+                border-left: 1px solid var(--borde);
+                background-color: var(--gris-suave);
+            }
+
+            .dossier-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+                padding: 32px;
+            }
+
+            .span-2 {
+                grid-column: span 2;
+            }
+
+            /* Formulario en escritorio */
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            .form-span-2 {
+                grid-column: span 2;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER GENERAL -->
+    <header class="app-header">
+        <div class="header-container">
+            <a href="#" class="brand-wrapper" title="Mendoza Futura">
+                <!-- Imagen del Logo Oficial enlazado a la nueva URL -->
+                <img src="https://enolife.com.ar/es/wp-content/uploads/2024/05/image-20.png" alt="Logo de Conectados por Mendoza Futura" class="brand-logo-img" onerror="handleLogoError(this)">
+                
+                <div class="brand-text">
+                    <span class="brand-name">Conectados</span>
+                    <span class="brand-sub">Mendoza Futura</span>
+                </div>
+            </a>
+            <div class="user-badge">
+                <span class="user-dot"></span>
+                <span>Preceptor: Auxiliar General</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVEGACIÓN -->
+    <nav class="app-nav">
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#" class="nav-link" onclick="cambiarSeccion('inicio')">Inicio</a></li>
+                <li class="nav-item"><a href="#" class="nav-link active" onclick="cambiarSeccion('alumnos')">Ficha de Alumnos</a></li>
+                <li class="nav-item"><a href="#" class="nav-link" onclick="cambiarSeccion('asistencia')">Asistencia</a></li>
+                <li class="nav-item"><a href="#" class="nav-link" onclick="cambiarSeccion('reportes')">Reportes</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="app-main">
+
+        <!-- Notificaciones de acciones -->
+        <div class="alert-toast" id="appAlert">
+            <span id="alertMessage">Acción ejecutada correctamente.</span>
+            <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.8rem;" onclick="cerrarAlerta()">X</button>
+        </div>
+
+        <!-- Seccion: Control de Alumnos (Único que tiene lógica de interacción) -->
+        <div id="section-alumnos">
+            
+            <!-- Barra de Acciones y Buscador -->
+            <div class="actions-bar">
+                <div class="search-form">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Ingresa DNI del alumno a buscar (Ej: 45123456)...">
+                    <button class="btn btn-primary" onclick="buscarEstudiante()">Buscar</button>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-success" onclick="abrirFormularioNuevo()">+ Registrar Alumno</button>
+                    <button class="btn btn-secondary" onclick="restablecerListas()">Restablecer Base</button>
+                </div>
+            </div>
+
+            <!-- FICHA DIGITAL (Modo Lectura) -->
+            <article class="student-dossier" id="studentDossier">
+                <div class="dossier-hero">
+                    <div class="dossier-meta">
+                        <span class="dossier-status-tag">⚡ Alumno Activo</span>
+                        <h2 class="dossier-name-title" id="lbl-nombre">Santiago Bañón</h2>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;" onclick="abrirFormularioEdicion()">
+                                Editar Prontuario
+                            </button>
+                            <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" id="btnEliminarEstudiante" onclick="eliminarEstudianteActual()">
+                                Dar de Baja
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Marco Prontuario Foto -->
+                    <div class="dossier-avatar-frame">
+                        <div class="photo-aspect-wrapper">
+                            <img id="lbl-foto" src="https://media.istockphoto.com/id/1438969575/es/foto/joven-estudiante-universitario-sonriente-con-auriculares-de-pie-en-un-aula.jpg?s=612x612&w=0&k=20&c=vYBEmD-AcLhEbM02BBKtTAFeIS4A0O71_RpS6KtMUk8=" alt="Fotografía de prontuario de Santiago Bañón">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grilla de Datos fiel al documento pront.jpg -->
+                <div class="dossier-grid">
+                    <div class="grid-cell">
+                        <div class="grid-label">DNI del Alumno</div>
+                        <div class="grid-value" id="lbl-dni">45123456</div>
+                    </div>
+
+                    <div class="grid-cell">
+                        <div class="grid-label">Género</div>
+                        <div class="grid-value" id="lbl-genero">Masculino</div>
+                    </div>
+
+                    <div class="grid-cell">
+                        <div class="grid-label">Fecha de Nacimiento</div>
+                        <div class="grid-value" id="lbl-nacimiento">12/08/2009</div>
+                    </div>
+
+                    <div class="grid-cell">
+                        <div class="grid-label">Número de Tutores Contacto</div>
+                        <div class="grid-value" id="lbl-tutores">2 (Mamá y Papá)</div>
+                    </div>
+
+                    <div class="grid-cell">
+                        <div class="grid-label">DNI del Tutor</div>
+                        <div class="grid-value" id="lbl-dni-tutor">27987654</div>
+                    </div>
+
+                    <div class="grid-cell">
+                        <div class="grid-label">Dirección</div>
+                        <div class="grid-value" id="lbl-direccion">Av. Boulogne Sur Mer 1400, Capital</div>
+                    </div>
+
+                    <div class="grid-cell">
+                        <div class="grid-label">Escuela</div>
+                        <div class="grid-value" id="lbl-escuela">Escuela Técnica de Informática</div>
+                    </div>
+
+                    <div class="grid-cell">
+                        <div class="grid-label">Correo Electrónico</div>
+                        <div class="grid-value" id="lbl-email">santiago.banon@mendozafutura.edu.ar</div>
+                    </div>
+
+                    <div class="grid-cell cell-badge">
+                        <div class="grid-label">Curso y División</div>
+                        <div class="grid-value" id="lbl-curso-division">Curso: 2º Año — División: 1ª</div>
+                    </div>
+
+                    <div class="grid-cell cell-badge cell-highlight">
+                        <div class="grid-label">Rendimiento en Clases</div>
+                        <div class="grid-value" id="lbl-rendimiento">Destacado (Asistencia regular 98%)</div>
+                    </div>
+
+                    <!-- Fila Completa de Alerta Sanitaria de Prontuario -->
+                    <div class="grid-cell cell-alert span-2">
+                        <div class="grid-label">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                            Problemas de Salud / Observaciones del Estudiante
+                        </div>
+                        <div class="grid-value" id="lbl-salud" style="margin-top: 4px; font-weight: 600;">Ninguno. Alergia estacional leve.</div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- FORMULARIO INTERACTIVO (Modo Edición / Creación) -->
+            <section class="form-dossier" id="formDossier">
+                <div class="form-header">
+                    <h3 class="form-header-title" id="formDossierTitle">Editar Prontuario de Alumno</h3>
+                    <button class="btn btn-secondary" style="padding: 4px 10px;" onclick="cerrarFormulario()">Cancelar</button>
+                </div>
+                <div class="form-body">
+                    <div class="form-grid">
+                        
+                        <div class="form-group">
+                            <label for="txtNombre">Nombre y Apellido*</label>
+                            <input type="text" id="txtNombre" class="form-control" required placeholder="Ej: Santiago Bañón">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtDni">DNI del Alumno*</label>
+                            <input type="text" id="txtDni" class="form-control" required placeholder="Ej: 45123456">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtGenero">Género</label>
+                            <input type="text" id="txtGenero" class="form-control" placeholder="Ej: Masculino, Femenino">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtNacimiento">Fecha de Nacimiento</label>
+                            <input type="text" id="txtNacimiento" class="form-control" placeholder="Ej: 12/08/2009">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtTutores">Número de Tutores / Contactos</label>
+                            <input type="text" id="txtTutores" class="form-control" placeholder="Ej: 2 (Mamá y Papá)">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtDniTutor">DNI del Tutor</label>
+                            <input type="text" id="txtDniTutor" class="form-control" placeholder="Ej: 27987654">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtDireccion">Dirección</label>
+                            <input type="text" id="txtDireccion" class="form-control" placeholder="Ej: Av. Boulogne Sur Mer 1400">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtEscuela">Escuela</label>
+                            <input type="text" id="txtEscuela" class="form-control" placeholder="Ej: Escuela Técnica de Informática">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtEmail">Correo Electrónico</label>
+                            <input type="email" id="txtEmail" class="form-control" placeholder="Ej: alumno@mendozafutura.edu.ar">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtCurso">Curso (Ej: 2º Año)</label>
+                            <input type="text" id="txtCurso" class="form-control" placeholder="Ej: 2º Año">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtDivision">División (Ej: 1ª)</label>
+                            <input type="text" id="txtDivision" class="form-control" placeholder="Ej: 1ª">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtRendimiento">Rendimiento en Clases</label>
+                            <input type="text" id="txtRendimiento" class="form-control" placeholder="Ej: Regular / Bueno / Excelente">
+                        </div>
+
+                        <div class="form-group form-span-2">
+                            <label for="txtFotoUrl">URL de la Foto de Perfil (Opcional)</label>
+                            <input type="text" id="txtFotoUrl" class="form-control" placeholder="Pegue la URL de una foto o deje en blanco">
+                        </div>
+
+                        <div class="form-group form-span-2">
+                            <label for="txtSalud" style="color: var(--error);">Problemas de Salud / Observaciones*</label>
+                            <textarea id="txtSalud" class="form-control" rows="3" placeholder="Registre alergias, asma u otras condiciones críticas..."></textarea>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="cerrarFormulario()">Cancelar</button>
+                    <button class="btn btn-primary" onclick="guardarFormulario()">Confirmar Registro</button>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- SECCIONES ESTÁTICAS DE REFERENCIA -->
+        <div id="section-inicio" style="display: none; animation: fadeIn 0.3s ease;">
+            <div style="background: var(--blanco); padding: 32px; border-radius: 12px; border: 1px solid var(--borde); text-align: center;">
+                <h2 style="color: var(--primario); margin-bottom: 16px;">¡Bienvenido a Conectados!</h2>
+                <p style="color: #475569; max-width: 600px; margin: 0 auto 24px auto;">
+                    Mendoza Futura es la plataforma integral para el seguimiento académico, asistencia y cuidado de los alumnos de la provincia de Mendoza.
+                </p>
+                <button class="btn btn-primary" onclick="cambiarSeccion('alumnos')">Ir a Fichas de Alumnos</button>
+            </div>
+        </div>
+
+        <div id="section-asistencia" style="display: none; animation: fadeIn 0.3s ease;">
+            <div style="background: var(--blanco); padding: 32px; border-radius: 12px; border: 1px solid var(--borde); text-align: center;">
+                <h2 style="color: var(--primario); margin-bottom: 16px;">Toma de Asistencia Diaria</h2>
+                <p style="color: #475569; margin-bottom: 24px;">Selecciona el curso para iniciar el llamado de asistencia rápida.</p>
+                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn btn-secondary">1º Año - 1ª Div</button>
+                    <button class="btn btn-secondary" onclick="cambiarSeccion('alumnos')">2º Año - 1ª Div (Santiago)</button>
+                    <button class="btn btn-secondary">2º Año - 2ª Div</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-reportes" style="display: none; animation: fadeIn 0.3s ease;">
+            <div style="background: var(--blanco); padding: 32px; border-radius: 12px; border: 1px solid var(--borde); text-align: center;">
+                <h2 style="color: var(--primario); margin-bottom: 16px;">Reportes e Inasistencias</h2>
+                <p style="color: #475569; margin-bottom: 24px;">Exporte planillas consolidadas listas para el GEM.</p>
+                <button class="btn btn-primary">Generar PDF Consolidado</button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER GENERAL -->
+    <footer class="app-footer">
+        <div class="footer-logo-text">CONECTADOS</div>
+        <p>&copy; 2026 Dirección General de Escuelas — Gobierno de Mendoza.</p>
+        <p style="font-size: 0.7rem; opacity: 0.7; margin-top: 8px;">Mendoza Futura: Programa de capacitación en tecnologías del futuro.</p>
+    </footer>
+
+    <!-- LÓGICA DE APLICACIÓN (Mendoza Futura Core engine) -->
+    <script>
+        // --- BASE DE DATOS LOCAL DE PRUEBA (Para simular búsquedas) ---
+        const ESTUDIANTES_POR_DEFECTO = [
+            {
+                dni: "45123456",
+                nombre: "Santiago Bañón",
+                genero: "Masculino",
+                nacimiento: "12/08/2009",
+                tutores: "2 (Mamá y Papá)",
+                dniTutor: "27987654",
+                direccion: "Av. Boulogne Sur Mer 1400, Capital",
+                escuela: "Escuela Técnica de Informática",
+                email: "santiago.banon@mendozafutura.edu.ar",
+                cursor: "2º Año",
+                division: "1ª",
+                rendimiento: "Destacado (Asistencia regular 98%)",
+                salud: "Ninguno. Alergia estacional leve.",
+                foto: "https://media.istockphoto.com/id/1438969575/es/foto/joven-estudiante-universitario-sonriente-con-auriculares-de-pie-en-un-aula.jpg?s=612x612&w=0&k=20&c=vYBEmD-AcLhEbM02BBKtTAFeIS4A0O71_RpS6KtMUk8="
+            },
+            {
+                dni: "46890123",
+                nombre: "Martina Fernández",
+                genero: "Femenino",
+                nacimiento: "03/11/2009",
+                tutores: "1 (Madre)",
+                dniTutor: "30123456",
+                direccion: "Calle San Martín 456, Godoy Cruz",
+                escuela: "Escuela Normal Tomás Godoy Cruz",
+                email: "martina.fernandez@mendozafutura.edu.ar",
+                curso: "2º Año",
+                division: "1ª",
+                rendimiento: "Bueno (Asistencia regular 92%)",
+                salud: "Asma leve. Trae inhalador en la mochila.",
+                foto: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                dni: "45778899",
+                nombre: "Lucas Giménez",
+                genero: "Masculino",
+                nacimiento: "22/01/2009",
+                tutores: "2 (Tíos tutores)",
+                dniTutor: "22334455",
+                direccion: "Barrio Unimev, Calle Houssay, Guaymallén",
+                escuela: "Escuela Manuel Belgrano",
+                email: "lucas.gimenez@mendozafutura.edu.ar",
+                curso: "3º Año",
+                division: "2ª",
+                rendimiento: "Regular (Requiere tutorías de apoyo)",
+                salud: "Celíaco. Requiere menú libre de gluten en el comedor.",
+                foto: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=400"
+            }
+        ];
+
+        // Estado dinámico cargado en memoria de la SPA
+        let baseEstudiantes = [];
+        let estudianteSeleccionado = null;
+        let esModoNuevo = false;
+
+        // Foto por defecto
+        const FOTO_DEFECTO = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=400";
+
+        // Inicializar la aplicación
+        window.addEventListener('DOMContentLoaded', () => {
+            // Cargar de LocalStorage si existe o inicializar con datos preestablecidos
+            const localData = localStorage.getItem('conectados_estudiantes_v1');
+            if (localData) {
+                baseEstudiantes = JSON.parse(localData);
+                // Asegurar que la imagen predeterminada de Santiago se actualice si ya estaba en caché de localStorage
+                const santiagoIndex = baseEstudiantes.findIndex(e => e.dni === "45123456");
+                if (santiagoIndex !== -1 && baseEstudiantes[santiagoIndex].foto.includes("unsplash.com")) {
+                    baseEstudiantes[santiagoIndex].foto = ESTUDIANTES_POR_DEFECTO[0].foto;
+                    localStorage.setItem('conectados_estudiantes_v1', JSON.stringify(baseEstudiantes));
+                }
+            } else {
+                baseEstudiantes = [...ESTUDIANTES_POR_DEFECTO];
+                localStorage.setItem('conectados_estudiantes_v1', JSON.stringify(baseEstudiantes));
+            }
+            
+            // Establecer Santiago como alumno de partida
+            estudianteSeleccionado = baseEstudiantes[0];
+            renderEstudianteActual();
+        });
+
+        // Manejo de error si la imagen del logo falla (reemplazo seguro por un contenedor fallback elegante)
+        function handleLogoError(imgElement) {
+            const parent = imgElement.parentElement;
+            const fallbackContainer = document.createElement('div');
+            fallbackContainer.className = 'brand-logo-img';
+            fallbackContainer.style.display = 'flex';
+            fallbackContainer.style.alignItems = 'center';
+            fallbackContainer.style.justifyContent = 'center';
+            fallbackContainer.style.backgroundColor = 'var(--blanco)';
+            fallbackContainer.innerHTML = `<span style="font-size: 1.25rem;">👌</span>`;
+            
+            parent.replaceChild(fallbackContainer, imgElement);
+        }
+
+        // --- SISTEMA DE CONTROL DE SECCIONES (SPA) ---
+        function cambiarSeccion(seccionId) {
+            // Cambiar estados de clase activo en navegación
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Mostrar/Ocultar bloques correspondientes
+            const secciones = ['inicio', 'alumnos', 'asistencia', 'reportes'];
+            secciones.forEach(sec => {
+                const el = document.getElementById(`section-${sec}`);
+                if (el) el.style.display = 'none';
+            });
+
+            // Activar
+            const elActivo = document.getElementById(`section-${seccionId}`);
+            if (elActivo) elActivo.style.display = 'block';
+
+            // Buscar link activo
+            const activeLink = Array.from(document.querySelectorAll('.nav-link')).find(link => 
+                link.textContent.toLowerCase().includes(seccionId === 'alumnos' ? 'ficha' : seccionId)
+            );
+            if (activeLink) activeLink.classList.add('active');
+        }
+
+        // --- ALERTA EN PANTALLA ---
+        function lanzarAlerta(mensaje, tipo = 'success') {
+            const toast = document.getElementById('appAlert');
+            const toastMessage = document.getElementById('alertMessage');
+            
+            toast.className = 'alert-toast ' + tipo;
+            toastMessage.textContent = mensaje;
+            toast.style.display = 'flex';
+
+            // Auto ocultar en 5 segundos
+            setTimeout(() => {
+                cerrarAlerta();
+            }, 5000);
+        }
+
+        function cerrarAlerta() {
+            document.getElementById('appAlert').style.display = 'none';
+        }
+
+        // --- RENDERIZADO DEL ESTUDIANTE ---
+        function renderEstudianteActual() {
+            if (!estudianteSeleccionado) return;
+
+            document.getElementById('lbl-nombre').textContent = estudianteSeleccionado.nombre;
+            document.getElementById('lbl-dni').textContent = estudianteSeleccionado.dni;
+            document.getElementById('lbl-genero').textContent = estudianteSeleccionado.genero || 'No especificado';
+            document.getElementById('lbl-nacimiento').textContent = estudianteSeleccionado.nacimiento || 'No especificado';
+            document.getElementById('lbl-tutores').textContent = estudianteSeleccionado.tutores || 'No especificado';
+            document.getElementById('lbl-dni-tutor').textContent = estudianteSeleccionado.dniTutor || 'No especificado';
+            document.getElementById('lbl-direccion').textContent = estudianteSeleccionado.direccion || 'No especificado';
+            document.getElementById('lbl-escuela').textContent = estudianteSeleccionado.escuela || 'No especificado';
+            document.getElementById('lbl-email').textContent = estudianteSeleccionado.email || 'No especificado';
+            document.getElementById('lbl-curso-division').textContent = `Curso: ${estudianteSeleccionado.curso || '-'} — División: ${estudianteSeleccionado.division || '-'}`;
+            document.getElementById('lbl-rendimiento').textContent = estudianteSeleccionado.rendimiento || 'No especificado';
+            document.getElementById('lbl-salud').textContent = estudianteSeleccionado.salud || 'Ninguno especificado.';
+
+            // Manejo de la foto
+            const imgEl = document.getElementById('lbl-foto');
+            imgEl.onerror = function() {
+                this.src = FOTO_DEFECTO;
+            };
+            imgEl.src = estudianteSeleccionado.foto || FOTO_DEFECTO;
+        }
+
+        // --- BÚSQUEDA ---
+        function buscarEstudiante() {
+            const valorBusqueda = document.getElementById('searchInput').value.trim().replace(/\D/g, ""); // remover puntos si los ponen
+            
+            if (!valorBusqueda) {
+                lanzarAlerta("Por favor ingresa un número de DNI para buscar.", "error");
+                return;
+            }
+
+            const encontrado = baseEstudiantes.find(e => e.dni.replace(/\D/g, "") === valorBusqueda);
+
+            if (encontrado) {
+                estudianteSeleccionado = encontrado;
+                renderEstudianteActual();
+                cerrarFormulario();
+                lanzarAlerta(`Estudiante "${encontrado.nombre}" localizado.`);
+            } else {
+                lanzarAlerta("No se encontró ningún estudiante con ese DNI.", "error");
+            }
+        }
+
+        // --- FORMULARIO EDICIÓN / ALTA ---
+        function abrirFormularioNuevo() {
+            esModoNuevo = true;
+            document.getElementById('formDossierTitle').textContent = "Registrar Nuevo Estudiante (Creación de Prontuario)";
+            
+            // Vaciar campos
+            document.getElementById('txtNombre').value = "";
+            document.getElementById('txtDni').value = "";
+            document.getElementById('txtGenero').value = "";
+            document.getElementById('txtNacimiento').value = "";
+            document.getElementById('txtTutores').value = "";
+            document.getElementById('txtDniTutor').value = "";
+            document.getElementById('txtDireccion').value = "";
+            document.getElementById('txtEscuela').value = "";
+            document.getElementById('txtEmail').value = "";
+            document.getElementById('txtCurso').value = "";
+            document.getElementById('txtDivision').value = "";
+            document.getElementById('txtRendimiento').value = "";
+            document.getElementById('txtFotoUrl').value = "";
+            document.getElementById('txtSalud').value = "";
+
+            // Cambiar vista
+            document.getElementById('studentDossier').style.display = 'none';
+            document.getElementById('formDossier').style.display = 'block';
+        }
+
+        function abrirFormularioEdicion() {
+            if (!estudianteSeleccionado) return;
+            esModoNuevo = false;
+            document.getElementById('formDossierTitle').textContent = `Editar Prontuario de ${estudianteSeleccionado.nombre}`;
+
+            // Cargar datos actuales
+            document.getElementById('txtNombre').value = estudianteSeleccionado.nombre || '';
+            document.getElementById('txtDni').value = estudianteSeleccionado.dni || '';
+            document.getElementById('txtGenero').value = estudianteSeleccionado.genero || '';
+            document.getElementById('txtNacimiento').value = estudianteSeleccionado.nacimiento || '';
+            document.getElementById('txtTutores').value = estudianteSeleccionado.tutores || '';
+            document.getElementById('txtDniTutor').value = estudianteSeleccionado.dniTutor || '';
+            document.getElementById('txtDireccion').value = estudianteSeleccionado.direccion || '';
+            document.getElementById('txtEscuela').value = estudianteSeleccionado.escuela || '';
+            document.getElementById('txtEmail').value = estudianteSeleccionado.email || '';
+            document.getElementById('txtCurso').value = estudianteSeleccionado.curso || '';
+            document.getElementById('txtDivision').value = estudianteSeleccionado.division || '';
+            document.getElementById('txtRendimiento').value = estudianteSeleccionado.rendimiento || '';
+            document.getElementById('txtFotoUrl').value = estudianteSeleccionado.foto || '';
+            document.getElementById('txtSalud').value = estudianteSeleccionado.salud || '';
+
+            // Habilitar edicion de DNI en caso de ser necesario
+            document.getElementById('txtDni').disabled = false;
+
+            // Cambiar vista
+            document.getElementById('studentDossier').style.display = 'none';
+            document.getElementById('formDossier').style.display = 'block';
+        }
+
+        // --- CERRAR FORMULARIO ---
+        function cerrarFormulario() {
+            document.getElementById('formDossier').style.display = 'none';
+            document.getElementById('studentDossier').style.display = 'flex';
+        }
+
+        // --- GUARDAR ---
+        function guardarFormulario() {
+            const nombre = document.getElementById('txtNombre').value.trim();
+            const dni = document.getElementById('txtDni').value.trim();
+            const salud = document.getElementById('txtSalud').value.trim();
+
+            if (!nombre || !dni) {
+                lanzarAlerta("El Nombre y el DNI son requeridos obligatoriamente.", "error");
+                return;
+            }
+
+            const estudianteData = {
+                dni: dni,
+                nombre: nombre,
+                genero: document.getElementById('txtGenero').value.trim(),
+                nacimiento: document.getElementById('txtNacimiento').value.trim(),
+                tutores: document.getElementById('txtTutores').value.trim(),
+                dniTutor: document.getElementById('txtDniTutor').value.trim(),
+                direccion: document.getElementById('txtDireccion').value.trim(),
+                escuela: document.getElementById('txtEscuela').value.trim(),
+                email: document.getElementById('txtEmail').value.trim(),
+                curso: document.getElementById('txtCurso').value.trim(),
+                division: document.getElementById('txtDivision').value.trim(),
+                rendimiento: document.getElementById('txtRendimiento').value.trim(),
+                foto: document.getElementById('txtFotoUrl').value.trim(),
+                salud: salud || "Ninguno especificado"
+            };
+
+            if (esModoNuevo) {
+                // Verificar duplicados
+                const existe = baseEstudiantes.some(e => e.dni === dni);
+                if (existe) {
+                    lanzarAlerta("Ya existe un estudiante registrado con este DNI.", "error");
+                    return;
+                }
+                baseEstudiantes.push(estudianteData);
+                estudianteSeleccionado = estudianteData;
+                lanzarAlerta("Nuevo prontuario guardado con éxito.");
+            } else {
+                // Modo Edición: Actualizar registro
+                const index = baseEstudiantes.findIndex(e => e.dni === estudianteSeleccionado.dni);
+                if (index !== -1) {
+                    baseEstudiantes[index] = estudianteData;
+                    estudianteSeleccionado = estudianteData;
+                    lanzarAlerta("Prontuario modificado y guardado correctamente.");
+                }
+            }
+
+            // Guardar cambios persistentes
+            localStorage.setItem('conectados_estudiantes_v1', JSON.stringify(baseEstudiantes));
+            
+            // Actualizar vista
+            renderEstudianteActual();
+            cerrarFormulario();
+        }
+
+        // --- ELIMINAR ---
+        function eliminarEstudianteActual() {
+            if (!estudianteSeleccionado) return;
+            
+            const confirmacion = confirm(`¿Está seguro de que desea dar de baja el prontuario de ${estudianteSeleccionado.nombre}?`);
+            if (!confirmacion) return;
+
+            baseEstudiantes = baseEstudiantes.filter(e => e.dni !== estudianteSeleccionado.dni);
+            localStorage.setItem('conectados_estudiantes_v1', JSON.stringify(baseEstudiantes));
+
+            lanzarAlerta("El alumno ha sido dado de baja de la base activa.", "error");
+
+            if (baseEstudiantes.length > 0) {
+                estudianteSeleccionado = baseEstudiantes[0];
+                renderEstudianteActual();
+            } else {
+                estudianteSeleccionado = null;
+                document.getElementById('lbl-nombre').textContent = "Sin estudiantes registrados";
+                document.getElementById('lbl-dni').textContent = "-";
+                document.getElementById('studentDossier').style.display = 'none';
+            }
+        }
+
+        // --- RESTABLECER BASE DE PRUEBA ---
+        function restablecerListas() {
+            const confirmacion = confirm("¿Deseas restaurar la base de datos a los 3 alumnos iniciales de Mendoza Futura?");
+            if (!confirmacion) return;
+
+            baseEstudiantes = [...ESTUDIANTES_POR_DEFECTO];
+            localStorage.setItem('conectados_estudiantes_v1', JSON.stringify(baseEstudiantes));
+            estudianteSeleccionado = baseEstudiantes[0];
+            
+            renderEstudianteActual();
+            document.getElementById('studentDossier').style.display = 'flex';
+            document.getElementById('formDossier').style.display = 'none';
+            lanzarAlerta("Base de datos de prueba restaurada.");
+        }
+    </script>
+</body>
+</html>
