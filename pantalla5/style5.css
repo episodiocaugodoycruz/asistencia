@@ -1,0 +1,180 @@
+:root{
+    --primario:#092e20;
+    --secundario:#1565c0;
+    --fondo:#f5f4f0;
+    --texto:#1c1c1c;
+    --borde:#e0ddd6;
+    --error:#ef4444;
+    --exito:#10b981;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'DM Sans', sans-serif;
+    background:var(--fondo);
+    color:var(--texto);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+header{
+    background:var(--primario);
+    color:white;
+    padding:16px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo-container{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo-container img{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    background:white;
+}
+
+.logo-container h1{
+    font-size:1.2rem;
+}
+
+.logo-container span{
+    font-size:.85rem;
+}
+
+.usuario{
+    font-weight:600;
+}
+
+nav{
+    background:white;
+    border-bottom:1px solid var(--borde);
+    padding:12px 16px;
+    display:flex;
+    gap:16px;
+    overflow-x:auto;
+}
+
+nav a{
+    text-decoration:none;
+    color:var(--primario);
+    font-weight:500;
+}
+
+main{
+    flex:1;
+    padding:16px;
+}
+
+.detalle-estudiante{
+    max-width:900px;
+    margin:auto;
+}
+
+.titulo{
+    margin-bottom:20px;
+}
+
+.titulo h2{
+    color:var(--primario);
+}
+
+.card-estudiante{
+    background:white;
+    border:1px solid var(--borde);
+    border-radius:16px;
+    padding:24px;
+    display:grid;
+    gap:18px;
+}
+
+.campo{
+    border-bottom:1px solid var(--borde);
+    padding-bottom:10px;
+}
+
+.campo:last-child{
+    border:none;
+}
+
+.campo span{
+    display:block;
+    font-size:.85rem;
+    color:#666;
+    margin-bottom:4px;
+}
+
+.campo p{
+    font-weight:600;
+}
+
+.acciones{
+    margin-top:24px;
+    display:flex;
+    gap:12px;
+    justify-content:flex-end;
+}
+
+.btn-principal{
+    background:var(--secundario);
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.btn-secundario{
+    background:white;
+    color:var(--primario);
+    border:1px solid var(--borde);
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+footer{
+    background:var(--primario);
+    color:white;
+    text-align:center;
+    padding:16px;
+}
+
+@media (min-width:768px){
+
+    header{
+        padding:20px 32px;
+    }
+
+    nav{
+        padding:16px 32px;
+    }
+
+    main{
+        padding:32px;
+    }
+
+    .card-estudiante{
+        grid-template-columns:1fr 1fr;
+        gap:24px;
+    }
+
+    .campo{
+        border:none;
+        background:#fafafa;
+        padding:16px;
+        border-radius:10px;
+        border:1px solid var(--borde);
+    }
+}
