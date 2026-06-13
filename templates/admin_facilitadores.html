@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+{% block titulo %}Facilitadores | Conectados{% endblock %}
+{% block nav_facilitadores %}activo{% endblock %}
+
+{% block extra_css %}
+<style>
+  .panel-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .panel-titulo {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--primario);
+    margin-bottom: 6px;
+  }
+
+  .panel-subtitulo {
+    font-size: 0.9rem;
+    color: var(--texto-muted);
+  }
+
+  .facilitadores-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .facilitador-card {
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: box-shadow .2s;
+  }
+
+  .facilitador-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,.1);
+  }
+
+  .facilitador-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--secundario);
+    color: white;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .facilitador-info h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primario);
+    margin-bottom: 4px;
+  }
+
+  .rol-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--secundario);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .facilitador-datos {
+    display: grid;
+    gap: 8px;
+  }
+
+  .dato-item {
+    background: #f8f9fa;
+    border: 1px solid var(--borde);
+    border-left: 4px solid var(--secundario);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.88rem;
+  }
+
+  .dato-item strong {
+    color: #475569;
+  }
+
+  .cursos-lista {
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .cursos-lista-titulo {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-bottom: 1px solid var(--borde);
+  }
+
+  .cursos-lista ul {
+    list-style: none;
+    padding: 0;
+    max-height: 160px;
+    overflow-y: auto;
+  }
+
+  .cursos-lista li {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--borde);
+    font-size: 0.88rem;
+    transition: background .2s;
+  }
+
+  .cursos-lista li:last-child { border-bottom: none; }
+  .cursos-lista li:hover { background: #eef5ff; color: var(--secundario); }
+
+  .lista-vacia {
+    color: var(--texto-muted);
+    font-style: italic;
+    font-size: 0.85rem;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--borde);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--borde);
+    color: var(--texto-muted);
+  }
+
+  @media (min-width: 768px) {
+    .facilitadores-grid { grid-template-columns: repeat(2, 1fr); }
+    .facilitador-datos { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (min-width: 1024px) {
+    .facilitadores-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+{% endblock %}
+
+{% block contenido %}
+
+<div class="panel-header">
+  <h2 class="panel-titulo">Gestión de Facilitadores</h2>
+  <p class="panel-subtitulo">Todos los facilitadores de Conectados por Mendoza Futura</p>
+</div>
+
+<a href="{% url 'crear_facilitador' %}" class="btn btn-primario" style="margin-bottom:24px; display:inline-flex; gap:6px;">+ Nuevo Facilitador</a>
+
+{% if facilitadores %}
+<div class="facilitadores-grid">
+  {% for f in facilitadores %}
+  <div class="facilitador-card">
+
+    <div class="facilitador-top">
+      <div class="avatar">👤</div>
+      <div class="facilitador-info">
+        <h3>{{ f.nombre_completo }}</h3>
+        <span class="rol-badge">Facilitador</span>
+      </div>
+    </div>
+
+    <div class="facilitador-datos">
+      <div class="dato-item"><strong>Usuario:</strong> {{ f.username }}</div>
+      <div class="dato-item"><strong>DNI:</strong> {{ f.dni }}</div>
+      <div class="dato-item"><strong>Email:</strong> {{ f.email|default:"—" }}</div>
+      {% if f.fecha_nacimiento %}
+      <div class="dato-item"><strong>Nacimiento:</strong> {{ f.fecha_nacimiento }}</div>
+      {% endif %}
+    </div>
+
+    <div class="cursos-lista">
+      <div class="cursos-lista-titulo">Cursos Asignados</div>
+      <ul>
+        {% for c in f.cursos_asignados.all %}
+        <li>📚 {{ c }}</li>
+        {% empty %}
+        <li class="lista-vacia" style="padding:8px 12px;">Sin cursos asignados</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="card-footer">
+      <a href="{% url 'editar_facilitador' f.id %}" class="btn btn-secundario" style="padding:5px 12px; font-size:0.82rem;">✏️ Editar</a>
+      <button onclick="confirmarEliminar('{{ f.id }}', '{{ f.nombre_completo }}')"
+              class="btn btn-danger" style="padding:5px 12px; font-size:0.82rem;">🗑</button>
+    </div>
+
+  </div>
+  {% endfor %}
+</div>
+
+{% else %}
+<div class="empty-state">
+  <p>No hay facilitadores cargados todavía.</p>
+  <a href="{% url 'crear_facilitador' %}" class="btn btn-primario">+ Agregar facilitador</a>
+</div>
+{% endif %}
+
+{% for f in facilitadores %}
+<form id="form-eliminar-{{ f.id }}" method="post" action="{% url 'eliminar_facilitador' f.id %}" style="display:none;">
+  {% csrf_token %}
+</form>
+{% endfor %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmarEliminar(id, nombre) {
+  if (confirm(`¿Seguro que querés eliminar al facilitador "${nombre}"?`)) {
+    document.getElementById('form-eliminar-' + id).submit();
+  }
+}
+</script>
+{% endblock %}

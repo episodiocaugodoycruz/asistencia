@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+{% block titulo %}Nuevo Estudiante | Conectados{% endblock %}
+{% block nav_estudiantes %}activo{% endblock %}
+
+{% block extra_css %}
+<style>
+  .form-dossier {
+    background-color: #ffffff;
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  }
+
+  .form-header {
+    background-color: var(--primario);
+    color: #ffffff;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .form-header-title { font-size: 1.15rem; font-weight: 700; }
+
+  .form-body { padding: 20px; }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #475569;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: var(--texto);
+    background-color: #ffffff;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-control:focus {
+    border-color: var(--secundario);
+    box-shadow: 0 0 0 3px rgba(21,101,192,0.15);
+  }
+
+  .form-actions {
+    border-top: 1px solid var(--borde);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    background-color: #faf9f6;
+  }
+
+  @media (min-width: 768px) {
+    .form-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .form-span-2 { grid-column: span 2; }
+  }
+</style>
+{% endblock %}
+
+{% block contenido %}
+
+{% if error %}
+<div class="mensaje-error" style="margin-bottom:16px; padding:12px 16px; border-radius:8px;">{{ error }}</div>
+{% endif %}
+
+<div class="form-dossier">
+  <div class="form-header">
+    <h3 class="form-header-title">Registrar Nuevo Estudiante</h3>
+    <a href="{% url 'estudiantes' %}" class="btn btn-secundario" style="padding:4px 12px; font-size:0.85rem;">Cancelar</a>
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-body">
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label for="nombre">Nombre *</label>
+          <input type="text" id="nombre" name="nombre" class="form-control" required placeholder="Ej: Santiago">
+        </div>
+
+        <div class="form-group">
+          <label for="apellido">Apellido *</label>
+          <input type="text" id="apellido" name="apellido" class="form-control" required placeholder="Ej: Bañón">
+        </div>
+
+        <div class="form-group">
+          <label for="dni">DNI *</label>
+          <input type="text" id="dni" name="dni" class="form-control" required placeholder="Ej: 45123456">
+        </div>
+
+        <div class="form-group">
+          <label for="genero">Género</label>
+          <select id="genero" name="genero" class="form-control">
+            <option value="">— Seleccioná —</option>
+            <option value="masculino">Masculino</option>
+            <option value="femenino">Femenino</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+          <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Correo Electrónico</label>
+          <input type="email" id="email" name="email" class="form-control" placeholder="Ej: alumno@mail.com">
+        </div>
+
+        <div class="form-group">
+          <label for="direccion">Dirección</label>
+          <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Ej: Av. San Martín 1400">
+        </div>
+
+        <div class="form-group">
+          <label for="escuela">Escuela</label>
+          <input type="text" id="escuela" name="escuela" class="form-control" placeholder="Ej: Escuela Técnica de Informática">
+        </div>
+
+        <div class="form-group">
+          <label for="curso">Curso</label>
+          <select id="curso" name="curso" class="form-control">
+            <option value="">— Sin asignar —</option>
+            {% for curso in cursos %}
+            <option value="{{ curso.id }}">{{ curso }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="tutor_nombre">Nombre del Tutor</label>
+          <input type="text" id="tutor_nombre" name="tutor_nombre" class="form-control" placeholder="Ej: María González">
+        </div>
+
+        <div class="form-group">
+          <label for="tutor_dni">DNI del Tutor</label>
+          <input type="text" id="tutor_dni" name="tutor_dni" class="form-control" placeholder="Ej: 27987654">
+        </div>
+
+        <div class="form-group">
+          <label for="tutor_contacto">Contacto del Tutor</label>
+          <input type="text" id="tutor_contacto" name="tutor_contacto" class="form-control" placeholder="Ej: 2615551234">
+        </div>
+
+        <div class="form-group form-span-2">
+          <label for="problemas_salud" style="color:var(--error);">Problemas de Salud / Observaciones</label>
+          <textarea id="problemas_salud" name="problemas_salud" class="form-control" rows="3"
+                    placeholder="Registrá alergias, asma u otras condiciones..."></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a href="{% url 'estudiantes' %}" class="btn btn-secundario">Cancelar</a>
+      <button type="submit" class="btn btn-primario">Confirmar Registro</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

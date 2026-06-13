@@ -1,0 +1,305 @@
+/* ═══════════════════════════════════════
+   CONECTADOS POR MENDOZA FUTURA
+   CSS Compartido — Todas las pantallas
+   ═══════════════════════════════════════ */
+
+:root {
+  --primario: #092e20;
+  --secundario: #1565c0;
+  --fondo: #f5f4f0;
+  --card: #ffffff;
+  --texto: #1c1c1c;
+  --texto-muted: #6b6b6b;
+  --borde: #e0ddd6;
+  --error: #ef4444;
+  --exito: #10b981;
+  --presente: #10b981;
+  --ausente: #e11d48;
+  --justificado: #f59e0b;
+}
+
+/* ── RESET ── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.6;
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--primario);
+  color: white;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.brand-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.brand-subtitle {
+  font-size: .8rem;
+  opacity: .8;
+}
+
+.usuario-header {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.logout-link {
+  color: #a8c5b0;
+  text-decoration: none;
+}
+.logout-link:hover { color: white; }
+
+/* ── NAV ── */
+nav {
+  background: white;
+  border-bottom: 2px solid var(--borde);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+}
+
+.nav-link {
+  color: var(--primario);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: .2s;
+}
+
+.nav-link:hover {
+  background: var(--fondo);
+  color: var(--secundario);
+}
+
+.nav-link.activo {
+  background: var(--primario);
+  color: white;
+}
+
+/* ── MAIN ── */
+main {
+  flex: 1;
+  padding: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--primario);
+  color: white;
+  text-align: center;
+  padding: 16px;
+  margin-top: auto;
+  font-size: 13px;
+}
+
+/* ── COMPONENTES COMPARTIDOS ── */
+
+/* Títulos de sección */
+.seccion-titulo {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--primario);
+}
+
+/* Cards */
+.card {
+  background: var(--card);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="search"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  transition: border-color .2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--secundario);
+}
+
+/* Labels */
+label {
+  font-size: 14px;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* Botones */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn-primario {
+  background: var(--primario);
+  color: white;
+}
+.btn-primario:hover { background: #0a3d2e; }
+
+.btn-secundario {
+  background: var(--secundario);
+  color: white;
+}
+.btn-secundario:hover { background: #0f4da0; }
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--borde);
+  color: var(--texto);
+}
+.btn-outline:hover { border-color: var(--primario); color: var(--primario); }
+
+/* Tablas */
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla th {
+  background: var(--primario);
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.tabla td {
+  padding: 12px;
+  border-bottom: 1px solid var(--borde);
+  font-size: 14px;
+}
+
+.tabla tr:hover {
+  background: #fafaf8;
+}
+
+/* Campos de formulario */
+.campo {
+  margin-bottom: 16px;
+}
+
+/* Badge de estado */
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-presente {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge-ausente {
+  background: #fee2e2;
+  color: #9f1239;
+}
+
+.badge-justificado {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* Mensajes */
+.mensaje-error {
+  background: #fee2e2;
+  border: 1px solid var(--error);
+  color: #9f1239;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.mensaje-exito {
+  background: #d1fae5;
+  border: 1px solid var(--exito);
+  color: #065f46;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+/* Grid layouts */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* ── RESPONSIVE ── */
+@media (min-width: 768px) {
+  header { padding: 20px 32px; }
+  nav { padding: 14px 32px; }
+  main { padding: 32px; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+}

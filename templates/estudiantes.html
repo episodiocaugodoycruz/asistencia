@@ -1,0 +1,421 @@
+{% extends "base.html" %}
+{% load static %}
+{% block titulo %}Estudiantes | Conectados{% endblock %}
+{% block nav_estudiantes %}activo{% endblock %}
+
+{% block extra_css %}
+<style>
+  .actions-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .filtros {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .filtro-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 160px;
+  }
+
+  .filtro-group label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #475569;
+    letter-spacing: 0.05em;
+  }
+
+  .filtro-group select,
+  .filtro-group input {
+    padding: 8px 10px;
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+
+  .filtro-group select:focus,
+  .filtro-group input:focus {
+    border-color: var(--secundario);
+  }
+
+  /* ── Lista de estudiantes ── */
+  .curso-seccion {
+    margin-bottom: 32px;
+  }
+
+  .curso-titulo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--primario);
+  }
+
+  .curso-titulo h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primario);
+  }
+
+  .curso-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(9,46,32,0.08);
+    color: var(--primario);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .estudiantes-lista {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .estudiante-row {
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: box-shadow .15s;
+  }
+
+  .estudiante-row:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .estudiante-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .estudiante-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--secundario);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .estudiante-nombre {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--texto);
+    margin-bottom: 2px;
+  }
+
+  .estudiante-meta {
+    font-size: 0.78rem;
+    color: var(--texto-muted);
+  }
+
+  .estudiante-salud {
+    font-size: 0.75rem;
+    color: var(--error);
+    font-weight: 600;
+    margin-top: 2px;
+  }
+
+  .estudiante-acciones {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* ── Ficha prontuario (detalle) ── */
+  .student-dossier {
+    background-color: #ffffff;
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.3s ease;
+    margin-top: 24px;
+  }
+
+  @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  .dossier-hero {
+    display: flex;
+    flex-direction: column-reverse;
+    background-color: #faf9f6;
+    border-bottom: 2px solid var(--borde);
+  }
+
+  .dossier-meta {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+  }
+
+  .dossier-name-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--primario);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .dossier-status-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--exito);
+    background-color: rgba(16,185,129,0.1);
+    padding: 4px 10px;
+    border-radius: 9999px;
+    width: fit-content;
+    margin-bottom: 12px;
+  }
+
+  .dossier-avatar-frame {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eae7df;
+    border-bottom: 1px solid var(--borde);
+  }
+
+  .photo-aspect-wrapper {
+    width: 140px;
+    height: 160px;
+    background-color: #ffffff;
+    border: 4px solid #ffffff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+  }
+
+  .dossier-grid {
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .grid-cell { border-bottom: 1px solid var(--borde); padding-bottom: 8px; }
+  .grid-label { font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: #5e6b7c; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .grid-value { font-size: 0.95rem; font-weight: 500; color: var(--texto); }
+
+  .cell-alert {
+    background-color: rgba(239,68,68,0.04);
+    border: 1px dashed var(--error);
+    border-radius: 6px;
+    padding: 10px;
+  }
+  .cell-alert .grid-label { color: var(--error); display: flex; align-items: center; gap: 6px; }
+  .cell-badge { background-color: #f1f5f9; border: 1px solid var(--borde); border-radius: 6px; padding: 10px; }
+  .cell-highlight { border-left: 3px solid var(--secundario); padding-left: 8px; }
+
+  .dossier-actions { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+
+  .empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--borde);
+    color: var(--texto-muted);
+  }
+
+  @media (min-width: 768px) {
+    .actions-bar { flex-direction: row; justify-content: space-between; align-items: flex-start; }
+    .estudiantes-lista { grid-template-columns: repeat(2, 1fr); }
+    .dossier-hero { flex-direction: row; justify-content: space-between; }
+    .dossier-meta { padding: 28px; }
+    .dossier-avatar-frame { padding: 28px; border-bottom: none; border-left: 1px solid var(--borde); }
+    .dossier-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 28px; }
+    .span-2 { grid-column: span 2; }
+  }
+
+  @media (min-width: 1024px) {
+    .estudiantes-lista { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+{% endblock %}
+
+{% block contenido %}
+
+<!-- Barra de acciones -->
+<div class="actions-bar">
+  <form method="get" class="filtros">
+    <div class="filtro-group">
+      <label for="curso">Curso</label>
+      <select name="curso" id="curso" onchange="this.form.submit()">
+        <option value="">— Todos los cursos —</option>
+        {% for c in cursos %}
+        <option value="{{ c.id }}" {% if curso_activo.id == c.id %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="filtro-group">
+      <label for="q">Buscar por nombre o DNI</label>
+      <input type="text" name="q" id="q" placeholder="Ej: María o 50123456"
+             value="{{ q }}">
+    </div>
+    <button type="submit" class="btn btn-primario" style="align-self:flex-end;">Filtrar</button>
+    {% if curso_activo or q %}
+    <a href="{% url 'estudiantes' %}" class="btn btn-secundario" style="align-self:flex-end;">Limpiar</a>
+    {% endif %}
+  </form>
+
+  {% if puede_crear %}
+  <a href="{% url 'crear_estudiante' %}" class="btn btn-primario" style="white-space:nowrap;">+ Nuevo Estudiante</a>
+  {% endif %}
+</div>
+
+<!-- Detalle de estudiante seleccionado -->
+{% if estudiante_detalle %}
+<div id="detalle-estudiante">
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+    <h3 style="color:var(--primario); font-size:1rem;">📋 Ficha del Estudiante</h3>
+    <a href="?{% if curso_activo %}curso={{ curso_activo.id }}&{% endif %}{% if q %}q={{ q }}{% endif %}"
+       style="font-size:0.85rem; color:var(--texto-muted); text-decoration:none;">✕ Cerrar ficha</a>
+  </div>
+
+  <article class="student-dossier">
+    <div class="dossier-hero">
+      <div class="dossier-meta">
+        <span class="dossier-status-tag">⚡ Alumno Activo</span>
+        <h2 class="dossier-name-title">{{ estudiante_detalle.nombre }} {{ estudiante_detalle.apellido }}</h2>
+        <div class="dossier-actions">
+          {% if puede_editar %}
+          <a href="{% url 'editar_estudiante' estudiante_detalle.id %}" class="btn btn-secundario" style="padding:6px 12px; font-size:0.85rem;">✏️ Editar</a>
+          {% endif %}
+          {% if puede_crear %}
+          <button onclick="confirmarBaja('{{ estudiante_detalle.id }}', '{{ estudiante_detalle.nombre }} {{ estudiante_detalle.apellido }}')"
+                  class="btn btn-danger" style="padding:6px 12px; font-size:0.85rem;">🗑 Dar de Baja</button>
+          {% endif %}
+        </div>
+      </div>
+      <div class="dossier-avatar-frame">
+        <div class="photo-aspect-wrapper">👤</div>
+      </div>
+    </div>
+
+    <div class="dossier-grid">
+      <div class="grid-cell"><div class="grid-label">DNI</div><div class="grid-value">{{ estudiante_detalle.dni }}</div></div>
+      <div class="grid-cell"><div class="grid-label">Género</div><div class="grid-value">{{ estudiante_detalle.get_genero_display|default:"—" }}</div></div>
+      <div class="grid-cell"><div class="grid-label">Fecha de Nacimiento</div><div class="grid-value">{{ estudiante_detalle.fecha_nacimiento|default:"—" }}</div></div>
+      <div class="grid-cell"><div class="grid-label">Email</div><div class="grid-value">{{ estudiante_detalle.email|default:"—" }}</div></div>
+      <div class="grid-cell"><div class="grid-label">Dirección</div><div class="grid-value">{{ estudiante_detalle.direccion|default:"—" }}</div></div>
+      <div class="grid-cell"><div class="grid-label">Escuela</div><div class="grid-value">{{ estudiante_detalle.escuela|default:"—" }}</div></div>
+      <div class="grid-cell cell-badge"><div class="grid-label">Curso</div><div class="grid-value">{{ estudiante_detalle.curso|default:"—" }}</div></div>
+      <div class="grid-cell cell-highlight"><div class="grid-label">Tutor</div><div class="grid-value">{{ estudiante_detalle.tutor_nombre|default:"—" }}</div></div>
+      <div class="grid-cell"><div class="grid-label">DNI Tutor</div><div class="grid-value">{{ estudiante_detalle.tutor_dni|default:"—" }}</div></div>
+      <div class="grid-cell"><div class="grid-label">Contacto Tutor</div><div class="grid-value">{{ estudiante_detalle.tutor_contacto|default:"—" }}</div></div>
+      <div class="grid-cell cell-alert span-2">
+        <div class="grid-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Problemas de Salud
+        </div>
+        <div class="grid-value" style="margin-top:4px; font-weight:600;">{{ estudiante_detalle.problemas_salud|default:"Ninguno especificado." }}</div>
+      </div>
+    </div>
+  </article>
+
+  <form id="form-baja" method="post" action="{% url 'eliminar_estudiante' estudiante_detalle.id %}" style="display:none;">{% csrf_token %}</form>
+</div>
+{% endif %}
+
+<!-- Lista de estudiantes por curso -->
+{% if grupos %}
+  {% for grupo in grupos %}
+  <div class="curso-seccion">
+    <div class="curso-titulo">
+      <h3>📚 {{ grupo.curso }}</h3>
+      <span class="curso-badge">{{ grupo.estudiantes|length }} estudiante{% if grupo.estudiantes|length != 1 %}s{% endif %}</span>
+    </div>
+
+    <div class="estudiantes-lista">
+      {% for est in grupo.estudiantes %}
+      <div class="estudiante-row">
+        <div class="estudiante-info">
+          <div class="estudiante-avatar">👤</div>
+          <div>
+            <div class="estudiante-nombre">{{ est.nombre }} {{ est.apellido }}</div>
+            <div class="estudiante-meta">DNI: {{ est.dni }} · {{ est.escuela|default:"—" }}</div>
+            {% if est.problemas_salud %}
+            <div class="estudiante-salud">⚠️ {{ est.problemas_salud|truncatechars:40 }}</div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="estudiante-acciones">
+          <a href="?ver={{ est.id }}{% if curso_activo %}&curso={{ curso_activo.id }}{% endif %}{% if q %}&q={{ q }}{% endif %}"
+             class="btn btn-secundario" style="padding:5px 10px; font-size:0.8rem;">Ver ficha</a>
+          {% if puede_editar %}
+          <a href="{% url 'editar_estudiante' est.id %}"
+             class="btn btn-primario" style="padding:5px 10px; font-size:0.8rem;">✏️</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+
+{% else %}
+  <div class="empty-state">
+    <p>No se encontraron estudiantes{% if q %} con "{{ q }}"{% endif %}{% if curso_activo %} en {{ curso_activo }}{% endif %}.</p>
+    {% if q or curso_activo %}
+    <a href="{% url 'estudiantes' %}" class="btn btn-secundario" style="margin-top:12px;">Ver todos</a>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmarBaja(id, nombre) {
+  if (confirm(`¿Está seguro de que desea dar de baja a ${nombre}?`)) {
+    document.getElementById('form-baja').submit();
+  }
+}
+// Scroll al detalle si está abierto
+{% if estudiante_detalle %}
+document.getElementById('detalle-estudiante')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+{% endif %}
+</script>
+{% endblock %}

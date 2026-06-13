@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block titulo %}Cursos | Conectados{% endblock %}
+{% block nav_cursos %}activo{% endblock %}
+
+{% block extra_css %}
+<style>
+  .panel-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .panel-titulo {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--primario);
+    margin-bottom: 6px;
+  }
+
+  .panel-subtitulo {
+    font-size: 0.9rem;
+    color: var(--texto-muted);
+  }
+
+  .cursos-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .curso-card {
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    transition: box-shadow .2s;
+  }
+
+  .curso-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,.1);
+  }
+
+  .curso-card h3 {
+    color: var(--primario);
+    margin-bottom: 6px;
+    font-size: 1.1rem;
+    border-bottom: 2px solid var(--secundario);
+    padding-bottom: 8px;
+  }
+
+  .curso-meta {
+    font-size: 0.82rem;
+    color: var(--texto-muted);
+    margin-bottom: 14px;
+  }
+
+  .lista-items {
+    list-style: none;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .lista-items li {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--borde);
+    font-size: 0.9rem;
+    transition: background .2s;
+  }
+
+  .lista-items li:last-child { border-bottom: none; }
+  .lista-items li:hover { background: #eef5ff; color: var(--secundario); }
+
+  .lista-vacia {
+    color: var(--texto-muted);
+    font-size: 0.85rem;
+    padding: 8px 0;
+    font-style: italic;
+  }
+
+  .curso-footer {
+    margin-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(9,46,32,0.08);
+    color: var(--primario);
+  }
+
+  .btn-nuevo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--borde);
+    color: var(--texto-muted);
+  }
+
+  .empty-state p { margin-bottom: 16px; font-size: 1rem; }
+
+  @media (min-width: 768px) {
+    .cursos-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .cursos-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+{% endblock %}
+
+{% block contenido %}
+
+<div class="panel-header">
+  <h2 class="panel-titulo">Gestión de Cursos</h2>
+  <p class="panel-subtitulo">Administrá los cursos, facilitadores y estudiantes asignados</p>
+</div>
+
+{% if user.es_administrador %}
+<a href="{% url 'crear_curso' %}" class="btn btn-primario btn-nuevo">+ Nuevo Curso</a>
+{% endif %}
+
+{% if cursos %}
+<div class="cursos-grid">
+  {% for curso in cursos %}
+  <div class="curso-card">
+    <h3>{{ curso.nombre }}</h3>
+    <p class="curso-meta">{{ curso.anio }} — División {{ curso.division }}</p>
+
+    <p style="font-size:0.8rem; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">Facilitadores</p>
+    <ul class="lista-items">
+      {% for f in curso.facilitadores.all %}
+      <li>👤 {{ f.nombre_completo }}</li>
+      {% empty %}
+      <li class="lista-vacia">Sin facilitadores asignados</li>
+      {% endfor %}
+    </ul>
+
+    <p style="font-size:0.8rem; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:0.5px; margin:12px 0 6px;">Estudiantes</p>
+    <ul class="lista-items">
+      {% for e in curso.estudiantes.all %}
+      <li>🎓 {{ e.nombre_completo }}</li>
+      {% empty %}
+      <li class="lista-vacia">Sin estudiantes asignados</li>
+      {% endfor %}
+    </ul>
+
+    <div class="curso-footer">
+      <span class="badge">{{ curso.cantidad_estudiantes }} estudiante{% if curso.cantidad_estudiantes != 1 %}s{% endif %}</span>
+      {% if user.es_administrador %}
+      <div style="display:flex; gap:8px;">
+        <a href="{% url 'editar_curso' curso.id %}" class="btn btn-secundario" style="padding:5px 12px; font-size:0.82rem;">✏️ Editar</a>
+        <button onclick="confirmarEliminar('{{ curso.id }}', '{{ curso.nombre }}')"
+                class="btn btn-danger" style="padding:5px 12px; font-size:0.82rem;">🗑</button>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% else %}
+<div class="empty-state">
+  <p>No hay cursos cargados todavía.</p>
+  {% if user.es_administrador %}
+  <a href="{% url 'crear_curso' %}" class="btn btn-primario">+ Crear primer curso</a>
+  {% endif %}
+</div>
+{% endif %}
+
+<!-- Forms ocultos para eliminar -->
+{% for curso in cursos %}
+<form id="form-eliminar-{{ curso.id }}" method="post" action="{% url 'eliminar_curso' curso.id %}" style="display:none;">
+  {% csrf_token %}
+</form>
+{% endfor %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmarEliminar(id, nombre) {
+  if (confirm(`¿Seguro que querés eliminar el curso "${nombre}"? Esta acción no se puede deshacer.`)) {
+    document.getElementById('form-eliminar-' + id).submit();
+  }
+}
+</script>
+{% endblock %}

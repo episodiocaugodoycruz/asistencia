@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block titulo %}Historial | Conectados{% endblock %}
+{% block nav_historial %}activo{% endblock %}
+
+{% block contenido %}
+<h2 class="seccion-titulo">Historial de Asistencia</h2>
+
+<div class="card" style="margin-bottom:20px;">
+  <form method="get" style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+    <div class="campo" style="min-width:200px; margin-bottom:0;">
+      <label for="curso">Filtrar por curso</label>
+      <select name="curso" id="curso">
+        <option value="">Todos</option>
+        {% for c in cursos %}
+        <option value="{{ c.id }}">{{ c }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="campo" style="margin-bottom:0;">
+      <label for="fecha">Fecha</label>
+      <input type="date" name="fecha" id="fecha">
+    </div>
+    <button type="submit" class="btn btn-primario">Filtrar</button>
+  </form>
+</div>
+
+<div class="card">
+  <table class="tabla">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Estudiante</th>
+        <th>Estado</th>
+        <th>Curso</th>
+        <th>Facilitador</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in asistencias %}
+      <tr>
+        <td>{{ a.fecha }}</td>
+        <td>{{ a.estudiante }}</td>
+        <td>
+          {% if a.estado == 'presente' %}
+          <span class="badge badge-presente">Presente</span>
+          {% elif a.estado == 'ausente' %}
+          <span class="badge badge-ausente">Ausente</span>
+          {% else %}
+          <span class="badge badge-justificado">Justificado</span>
+          {% endif %}
+        </td>
+        <td>{{ a.curso|default:"—" }}</td>
+        <td>{{ a.facilitador|default:"—" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" style="color:var(--texto-muted);">No hay registros de asistencia</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
