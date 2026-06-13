@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block titulo %}Dashboard | Conectados{% endblock %}
+{% block nav_dashboard %}activo{% endblock %}
+
+{% block contenido %}
+<h2 class="seccion-titulo">Dashboard</h2>
+
+<div class="grid-3" style="margin-bottom:24px;">
+  <div class="card" style="text-align:center;">
+    <p style="font-size:36px; font-weight:700; color:var(--primario);">{{ total_estudiantes }}</p>
+    <p style="color:var(--texto-muted);">Estudiantes</p>
+  </div>
+
+  {% if user.es_administrador %}
+  <div class="card" style="text-align:center;">
+    <p style="font-size:36px; font-weight:700; color:var(--secundario);">{{ total_facilitadores }}</p>
+    <p style="color:var(--texto-muted);">Facilitadores</p>
+  </div>
+  {% endif %}
+
+  <div class="card" style="text-align:center;">
+    <p style="font-size:36px; font-weight:700; color:var(--exito);">{{ cursos.count }}</p>
+    <p style="color:var(--texto-muted);">Cursos</p>
+  </div>
+</div>
+<div class="card">
+  <h3 style="margin-bottom:12px; color:var(--primario);">Cursos Activos</h3>
+  <table class="tabla">
+    <thead>
+      <tr>
+        <th>Curso</th>
+        <th>Año</th>
+        <th>División</th>
+        <th>Estudiantes</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for curso in cursos %}
+      <tr>
+        <td>{{ curso.nombre }}</td>
+        <td>{{ curso.anio }}</td>
+        <td>{{ curso.division }}</td>
+        <td>{{ curso.cantidad_estudiantes }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" style="color:var(--texto-muted);">No hay cursos cargados</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block titulo %}Conectados por Mendoza Futura{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo-container">
+      <img src="{% static 'img/logo.png' %}" alt="Logo Conectados" class="logo">
+      <div>
+        <h1 class="brand-title">Conectados</h1>
+        <span class="brand-subtitle">por Mendoza Futura</span>
+      </div>
+    </div>
+    <div class="usuario-header">
+      {% if user.is_authenticated %}
+        {{ user.nombre_completo }} · <a href="{% url 'logout' %}" class="logout-link">Salir</a>
+      {% else %}
+        Invitado
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- NAV -->
+  {% if user.is_authenticated %}
+  <nav>
+    <a href="{% url 'dashboard' %}" class="nav-link {% block nav_dashboard %}{% endblock %}">Inicio</a>
+    <a href="{% url 'asistencia' %}" class="nav-link {% block nav_asistencia %}{% endblock %}">Asistencia</a>
+    <a href="{% url 'estudiantes' %}" class="nav-link {% block nav_estudiantes %}{% endblock %}">Estudiantes</a>
+    <a href="{% url 'historial' %}" class="nav-link {% block nav_historial %}{% endblock %}">Historial</a>
+    <a href="{% url 'admin_cursos' %}" class="nav-link {% block nav_cursos %}{% endblock %}">Cursos</a>
+
+    {% if user.es_administrador %}
+    <a href="{% url 'admin_facilitadores' %}" class="nav-link {% block nav_facilitadores %}{% endblock %}">Facilitadores</a>
+    {% endif %}
+  </nav>
+  {% endif %}
+  <!-- MAIN -->
+  <main>
+    {% block contenido %}{% endblock %}
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    &copy; 2026 Conectados por Mendoza Futura - Sistema de Asistencia Escolar
+  </footer>
+
+  {% block extra_js %}{% endblock %}
+
+</body>
+</html>

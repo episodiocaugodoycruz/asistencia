@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block titulo %}Toma de Asistencia | Conectados{% endblock %}
+{% block nav_asistencia %}activo{% endblock %}
+
+{% block contenido %}
+<h2 class="seccion-titulo">Control de Asistencia</h2>
+
+<div class="card" style="margin-bottom:20px;">
+  <form method="get" style="display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap;">
+    <div class="campo" style="min-width:200px; margin-bottom:0;">
+      <label for="curso">Curso</label>
+      <select name="curso" id="curso">
+        <option value="">Seleccioná un curso</option>
+        {% for c in cursos %}
+        <option value="{{ c.id }}" {% if curso_seleccionado.id == c.id %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="campo" style="margin-bottom:0;">
+      <label for="fecha">Fecha</label>
+      <input type="date" name="fecha" id="fecha" value="{{ fecha }}">
+    </div>
+    <button type="submit" class="btn btn-primario">Cargar</button>
+  </form>
+</div>
+
+{% if curso_seleccionado %}
+<div class="card" id="panel-asistencia">
+  <h3 style="margin-bottom:16px; color:var(--primario);">{{ curso_seleccionado }} — {{ fecha }}</h3>
+
+  {% if estudiantes %}
+  <table class="tabla">
+    <thead>
+      <tr>
+        <th>Alumno</th>
+        <th>Estado</th>
+        <th>Observaciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in estudiantes %}
+      <tr data-estudiante-id="{{ item.estudiante.id }}">
+        <td>
+          <strong>{{ item.estudiante.nombre_completo }}</strong><br>
+          <span style="font-size:12px; color:var(--texto-muted);">DNI: {{ item.estudiante.dni }}</span>
+        </td>
+        <td>
+          <label style="display:inline;"><input type="radio" name="estado_{{ item.estudiante.id }}" value="presente" {% if item.estado == 'presente' %}checked{% endif %}> Presente</label><br>
+          <label style="display:inline;"><input type="radio" name="estado_{{ item.estudiante.id }}" value="ausente" {% if item.estado == 'ausente' %}checked{% endif %}> Ausente</label><br>
+          <label style="display:inline;"><input type="radio" name="estado_{{ item.estudiante.id }}" value="ausente_justificado" {% if item.estado == 'ausente_justificado' %}checked{% endif %}> Justificado</label>
+        </td>
+        <td>
+          <textarea name="obs_{{ item.estudiante.id }}" rows="2" style="width:100%; min-width:150px;">{{ item.observaciones }}</textarea>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="text-align:right; margin-top:16px;">
+    <button class="btn btn-primario" id="btn-guardar">Guardar Asistencia</button>
+  </div>
+  {% else %}
+  <p style="color:var(--texto-muted);">Este curso no tiene estudiantes inscriptos.</p>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if curso_seleccionado %}
+<script>
+document.getElementById('btn-guardar')?.addEventListener('click', async function() {
+  const filas = document.querySelectorAll('#panel-asistencia tbody tr');
+  const registros = [];
+
+  filas.forEach(fila => {
+    const estId = fila.dataset.estudianteId;
+    const radios = fila.querySelectorAll(`input[name="estado_${estId}"]`);
+    let estado = '';
+    radios.forEach(r => { if (r.checked) estado = r.value; });
+    const obs = fila.querySelector(`textarea[name="obs_${estId}"]`).value;
+
+    if (estado) {
+      registros.push({ estudiante_id: parseInt(estId), estado, observaciones: obs });
+    }
+  });
+
+  if (registros.length === 0) {
+    alert('Seleccioná al menos un estado.');
+    return;
+  }
+
+  const resp = await fetch('{% url "guardar_asistencia" %}', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': '{{ csrf_token }}'
+    },
+    body: JSON.stringify({
+      curso_id: {{ curso_seleccionado.id }},
+      fecha: '{{ fecha }}',
+      registros
+    })
+  });
+
+  const data = await resp.json();
+  if (data.ok) {
+    alert('✅ Asistencia guardada correctamente');
+  }
+});
+</script>
+{% endif %}
+{% endblock %}
